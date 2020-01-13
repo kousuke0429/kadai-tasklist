@@ -1,9 +1,8 @@
 package controllers2;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
-import javax.persistence.EntityManager;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,13 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models2.Task;
-import utils2.DBUtil2;
+
 /**
- * Servlet implementation class NewServlet2
+ * Servlet implementation class NewServlet
  */
 @WebServlet("/new")
 public class NewServlet2 extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -27,34 +26,17 @@ public class NewServlet2 extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        EntityManager em = DBUtil2.createEntityManager();
-        em.getTransaction().begin();
+        // CSRF対策
+        request.setAttribute("_token", request.getSession().getId());
 
-        // Messageのインスタンスを生成
-        Task m = new Task();
+        // おまじないとしてのインスタンスを生成
+        request.setAttribute("task", new Task());
 
-        // mの各プロパティにデータを代入
-        String title = "taro";
-        m.setTitle(title);
-
-        String content = "hello";
-        m.setContent(content);
-
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());     // 現在の日時を取得
-        m.setCreated_at(currentTime);
-        m.setUpdated_at(currentTime);
-
-        // データベースに保存
-        em.persist(m);
-        em.getTransaction().commit();
-
-        // 自動採番されたIDの値を表示
-        response.getWriter().append(Integer.valueOf(m.getId()).toString());
-
-        em.close();
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views2/tasks/new.jsp");
+        rd.forward(request, response);
      }
 }
