@@ -17,13 +17,13 @@ import utils2.DBUtil2;
  * Servlet implementation class ShowServlet
  */
 @WebServlet("/show")
-public class ShowServlet extends HttpServlet {
+public class ShowServlet2 extends HttpServlet {
         private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ShowServlet() {
+    public ShowServlet2() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,3 +46,4 @@ public class ShowServlet extends HttpServlet {
             rd.forward(request, response);
         }
 }
+
